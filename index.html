@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaiden OS | Crisis Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .neon-red { box-shadow: 0 0 10px #ef4444; }
+        .neon-green { box-shadow: 0 0 10px #22c55e; }
+        .btn-hover:hover { transform: translateY(-2px); transition: all 0.2s; }
+        
+        /* Begging button animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shake { animation: shake 0.5s; animation-iteration-count: infinite; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4">
+
+    <header class="w-full max-w-2xl text-center mb-8 mt-4">
+        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">JAIDEN OS v2.0</h1>
+        <p class="text-slate-400 text-sm mt-2">Current Status: <span class="text-green-400 font-bold">LEGENDARY (Post-Boat Party)</span></p>
+    </header>
+
+    <main class="w-full max-w-2xl space-y-6">
+
+        <div class="glass rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                ⚠️ Threat Level Assessment
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Natalia (Missed Calls: <span id="calls-count">16</span>)</span>
+                        <span class="text-red-400 font-bold">CRITICAL</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Tarinee (Gemini PDF Skills)</span>
+                        <span class="text-orange-400 font-bold">HIGH</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                        <div class="bg-orange-500 h-2.5 rounded-full" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Jaiden's Composure</span>
+                        <span class="text-green-400 font-bold">ICE COLD</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="glass rounded-xl p-6 text-center hover:border-red-500 transition-colors cursor-pointer group" onclick="handleNatalia()">
+                <div class="text-4xl mb-2">📞</div>
+                <h3 class="font-bold text-red-300">Natalia is Calling</h3>
+                <p class="text-xs text-slate-400 mt-2 group-hover:text-white">Click to Answer</p>
+            </div>
+
+            <div class="glass rounded-xl p-6 text-center hover:border-blue-500 transition-colors cursor-pointer group" onclick="handleTarinee()">
+                <div class="text-4xl mb-2">🤖</div>
+                <h3 class="font-bold text-blue-300">Tarinee Sent a PDF</h3>
+                <p class="text-xs text-slate-400 mt-2 group-hover:text-white">Click to Inspect</p>
+            </div>
+        </div>
+
+        <div class="glass rounded-xl p-6 border-l-4 border-green-500">
+            <h2 class="text-xl font-bold mb-4">🥂 Tonight's Date Strategy</h2>
+            <ul class="space-y-3 text-sm">
+                <li class="flex items-start">
+                    <span class="mr-2 text-green-400">✓</span>
+                    Mention your consulting job.
+                </li>
+                <li class="flex items-start">
+                    <span class="mr-2 text-green-400">✓</span>
+                    Look mysterious and composed.
+                </li>
+                <li class="flex items-start">
+                    <span class="mr-2 text-red-500">✖</span>
+                    DO NOT mention the Hinge snitch.
+                </li>
+                <li class="flex items-start">
+                    <span class="mr-2 text-red-500">✖</span>
+                    DO NOT mention the phrase "AI-generated pregnancy test."
+                </li>
+                 <li class="flex items-start">
+                    <span class="mr-2 text-red-500">✖</span>
+                    DO NOT bring up the Boat Party (Save that for the 3rd date).
+                </li>
+            </ul>
+        </div>
+
+        <div class="glass rounded-xl p-6 text-center relative overflow-hidden">
+            <h2 class="text-xl font-bold mb-4 text-purple-300">The "Beg For Her Back" Simulator</h2>
+            <p class="text-sm text-slate-400 mb-6">Natalia wants you to beg. Try to click the button below.</p>
+            
+            <button id="begBtn" class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg neon-red transition-all absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.1s ease;">
+                BEG FOR FORGIVENESS
+            </button>
+            <div class="h-32"></div> </div>
+        
+        <div class="text-center pt-8 pb-12">
+            <button onclick="boatPartyReminder()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full font-bold shadow-lg btn-hover w-full md:w-auto">
+                I'm feeling anxious...
+            </button>
+        </div>
+
+    </main>
+
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-90 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 p-8 rounded-xl max-w-md text-center border border-slate-600 shadow-2xl">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4"></h2>
+            <p id="modal-text" class="text-lg text-slate-300 mb-6"></p>
+            <button onclick="closeModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-6 py-2 rounded-lg font-bold">Dismiss</button>
+        </div>
+    </div>
+
+    <script>
+        // The Anti-Begging Button Logic
+        const begBtn = document.getElementById('begBtn');
+        const container = begBtn.parentElement;
+
+        container.addEventListener('mousemove', (e) => {
+            const x = e.clientX - container.getBoundingClientRect().left;
+            const y = e.clientY - container.getBoundingClientRect().top;
+            
+            // If mouse gets close to button, move button
+            const btnRect = begBtn.getBoundingClientRect();
+            const btnX = btnRect.left + btnRect.width / 2 - container.getBoundingClientRect().left;
+            const btnY = btnRect.top + btnRect.height / 2 - container.getBoundingClientRect().top;
+
+            const dist = Math.sqrt(Math.pow(x - btnX, 2) + Math.pow(y - btnY, 2));
+
+            if (dist < 100) {
+                const newX = Math.random() * (container.offsetWidth - 100);
+                const newY = Math.random() * (container.offsetHeight - 50);
+                begBtn.style.left = newX + 'px';
+                begBtn.style.top = newY + 'px';
+                begBtn.style.transform = 'none';
+                begBtn.innerText = "NOPE.";
+            }
+        });
+
+        // Event Handlers
+        function handleNatalia() {
+            showModal(
+                "🛑 ACCESS DENIED", 
+                "Bro. She called 16 times. She wants you to beg. You stayed calm. Do not fold now. Put the phone down and go do some pushups."
+            );
+        }
+
+        function handleTarinee() {
+            showModal(
+                "🤖 GEMINI DETECTION SYSTEM", 
+                "Scanning PDF... \n\n Analysis: 99.9% FAKE. \n\n This pregnancy test was made by Large Language Model. Do not engage. Do not reply to the Hinge snitch."
+            );
+        }
+
+        function boatPartyReminder() {
+            showModal(
+                "🚤 BOAT PARTY MEMORY UNLOCKED", 
+                "Remember the Boat Party. You are a legend. You had a fivesome. You do not need to stress about a girl who fakes PDFs or a girl who screams at you. You are Jaiden Matharu. Go enjoy your date."
+            );
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalText = document.getElementById('modal-text');
+
+        function showModal(title, text) {
+            modalTitle.innerText = title;
+            modalText.innerText = text;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
