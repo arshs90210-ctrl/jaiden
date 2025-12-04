@@ -3,203 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaiden OS | Crisis Management</title>
+    <title>M3 | MATHARU MISCONDUCT MANAGER</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #0f172a; color: #e2e8f0; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .neon-red { box-shadow: 0 0 10px #ef4444; }
-        .neon-green { box-shadow: 0 0 10px #22c55e; }
-        .btn-hover:hover { transform: translateY(-2px); transition: all 0.2s; }
-        
-        /* Begging button animation */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        :root {
+            --neon-red: #ff3333;
+            --neon-green: #00ff41;
+            --neon-blue: #00f3ff;
+            --bg-color: #050505;
+            --panel-bg: rgba(20, 20, 20, 0.6);
         }
-        .shake { animation: shake 0.5s; animation-iteration-count: infinite; }
+        
+        body { 
+            font-family: 'JetBrains Mono', monospace; 
+            background-color: var(--bg-color); 
+            color: #e0e0e0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            overflow-x: hidden;
+        }
+
+        /* Glitch Effect */
+        .glitch { position: relative; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .glitch::before { left: 2px; text-shadow: -1px 0 var(--neon-red); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
+        .glitch::after { left: -2px; text-shadow: -1px 0 var(--neon-blue); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            20% { clip: rect(80px, 9999px, 100px, 0); }
+            100% { clip: rect(10px, 9999px, 100px, 0); }
+        }
+
+        /* Glassmorphism Panels */
+        .hud-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Radar Animation */
+        .radar-sweep {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 90%; height: 90%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+        }
+        .radar-line {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 50%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-green));
+            transform-origin: 0 0;
+            animation: radar-spin 4s infinite linear;
+        }
+        @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .blip {
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 5px currentColor;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.5); } 100% { opacity: 1; transform: scale(1); } }
+
+        /* Scroller */
+        .marquee-container { overflow: hidden; white-space: nowrap; position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid var(--neon-green); z-index: 50; }
+        .marquee-content { display: inline-block; padding-left: 100%; animation: scroll 20s linear infinite; font-size: 0.8rem; color: var(--neon-green); padding-top: 5px; padding-bottom: 5px; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* Utilities */
+        .text-neon-red { color: var(--neon-red); text-shadow: 0 0 5px var(--neon-red); }
+        .text-neon-green { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
+        .border-neon-red { border-color: var(--neon-red); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4">
+<body class="pb-16">
 
-    <header class="w-full max-w-2xl text-center mb-8 mt-4">
-        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">JAIDEN OS v2.0</h1>
-        <p class="text-slate-400 text-sm mt-2">Current Status: <span class="text-green-400 font-bold">LEGENDARY (Post-Boat Party)</span></p>
+    <header class="p-6 border-b border-gray-800 flex justify-between items-center bg-black/80 sticky top-0 z-40 backdrop-blur-md">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tighter text-white glitch" data-text="M3 PROTOCOL">M3 PROTOCOL</h1>
+            <p class="text-xs text-gray-500 font-mono">MATHARU MISCONDUCT MANAGER v1.0</p>
+        </div>
+        <div class="text-right hidden md:block">
+            <p class="text-xs text-neon-green">SYSTEM: ONLINE</p>
+            <p class="text-xs text-gray-500">USER: JAIDEN (DEGENERATE)</p>
+        </div>
     </header>
 
-    <main class="w-full max-w-2xl space-y-6">
+    <main class="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-12 gap-6 mt-4">
 
-        <div class="glass rounded-xl p-6">
-            <h2 class="text-xl font-bold mb-4 flex items-center">
-                ⚠️ Threat Level Assessment
-            </h2>
-            <div class="space-y-4">
-                <div>
-                    <div class="flex justify-between text-sm mb-1">
-                        <span>Natalia (Missed Calls: <span id="calls-count">16</span>)</span>
-                        <span class="text-red-400 font-bold">CRITICAL</span>
-                    </div>
-                    <div class="w-full bg-slate-700 rounded-full h-2.5">
-                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 95%"></div>
-                    </div>
+        <div class="md:col-span-4 hud-panel rounded-lg p-1 min-h-[300px] flex flex-col relative">
+            <div class="p-3 border-b border-gray-800 flex justify-between">
+                <span class="text-xs font-bold text-neon-red">THREAT RADAR</span>
+                <span class="text-xs text-gray-400">RANGE: 5KM</span>
+            </div>
+            <div class="flex-grow relative flex items-center justify-center bg-black/40 m-2 rounded border border-gray-800">
+                <div class="radar-sweep">
+                    <div class="radar-line"></div>
+                    <div class="blip bg-red-600" style="top: 20%; left: 70%;" title="Natalia (Ballistic)"></div>
+                    <div class="blip bg-orange-500" style="top: 60%; left: 30%; width: 20px; height: 20px; filter: blur(4px);" title="Tarinee (Toxic Cloud)"></div>
+                    <div class="blip bg-yellow-400" style="top: 80%; left: 80%; width: 4px; height: 4px;"></div>
+                    <div class="blip bg-yellow-400" style="top: 85%; left: 75%; width: 4px; height: 4px;"></div>
                 </div>
-                <div>
-                    <div class="flex justify-between text-sm mb-1">
-                        <span>Tarinee (Gemini PDF Skills)</span>
-                        <span class="text-orange-400 font-bold">HIGH</span>
-                    </div>
-                    <div class="w-full bg-slate-700 rounded-full h-2.5">
-                        <div class="bg-orange-500 h-2.5 rounded-full" style="width: 75%"></div>
-                    </div>
+                <div class="absolute inset-0 border border-gray-800 rounded-full w-3/4 h-3/4 m-auto"></div>
+                <div class="absolute inset-0 border border-gray-800 rounded-full w-1/4 h-1/4 m-auto"></div>
+            </div>
+            <div class="p-3 grid grid-cols-2 gap-2 text-center">
+                <div class="bg-red-900/20 rounded p-2 border border-red-900/50">
+                    <p class="text-[10px] text-red-400">NATALIA</p>
+                    <p class="text-xl font-bold text-neon-red animate-pulse">CRITICAL</p>
                 </div>
-                <div>
-                    <div class="flex justify-between text-sm mb-1">
-                        <span>Jaiden's Composure</span>
-                        <span class="text-green-400 font-bold">ICE COLD</span>
-                    </div>
-                    <div class="w-full bg-slate-700 rounded-full h-2.5">
-                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%"></div>
-                    </div>
+                <div class="bg-green-900/20 rounded p-2 border border-green-900/50">
+                    <p class="text-[10px] text-green-400">COMPOSURE</p>
+                    <p class="text-xl font-bold text-neon-green">GOONER</p>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="glass rounded-xl p-6 text-center hover:border-red-500 transition-colors cursor-pointer group" onclick="handleNatalia()">
-                <div class="text-4xl mb-2">📞</div>
-                <h3 class="font-bold text-red-300">Natalia is Calling</h3>
-                <p class="text-xs text-slate-400 mt-2 group-hover:text-white">Click to Answer</p>
+        <div class="md:col-span-4 hud-panel rounded-lg p-4 flex flex-col">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h2 class="text-sm font-bold text-neon-blue">PERFORMANCE METRICS</h2>
+                    <p class="text-[10px] text-gray-500">Q3 REBOUND ANALYSIS</p>
+                </div>
+                <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded border border-yellow-500/30">CERTIFIED DEGENERATE</span>
             </div>
-
-            <div class="glass rounded-xl p-6 text-center hover:border-blue-500 transition-colors cursor-pointer group" onclick="handleTarinee()">
-                <div class="text-4xl mb-2">🤖</div>
-                <h3 class="font-bold text-blue-300">Tarinee Sent a PDF</h3>
-                <p class="text-xs text-slate-400 mt-2 group-hover:text-white">Click to Inspect</p>
-            </div>
-        </div>
-
-        <div class="glass rounded-xl p-6 border-l-4 border-green-500">
-            <h2 class="text-xl font-bold mb-4">🥂 Tonight's Date Strategy</h2>
-            <ul class="space-y-3 text-sm">
-                <li class="flex items-start">
-                    <span class="mr-2 text-green-400">✓</span>
-                    Mention your consulting job.
-                </li>
-                <li class="flex items-start">
-                    <span class="mr-2 text-green-400">✓</span>
-                    Look mysterious and composed.
-                </li>
-                <li class="flex items-start">
-                    <span class="mr-2 text-red-500">✖</span>
-                    DO NOT mention the Hinge snitch.
-                </li>
-                <li class="flex items-start">
-                    <span class="mr-2 text-red-500">✖</span>
-                    DO NOT mention the phrase "AI-generated pregnancy test."
-                </li>
-                 <li class="flex items-start">
-                    <span class="mr-2 text-red-500">✖</span>
-                    DO NOT bring up the Boat Party (Save that for the 3rd date).
-                </li>
-            </ul>
-        </div>
-
-        <div class="glass rounded-xl p-6 text-center relative overflow-hidden">
-            <h2 class="text-xl font-bold mb-4 text-purple-300">The "Beg For Her Back" Simulator</h2>
-            <p class="text-sm text-slate-400 mb-6">Natalia wants you to beg. Try to click the button below.</p>
             
-            <button id="begBtn" class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg neon-red transition-all absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.1s ease;">
-                BEG FOR FORGIVENESS
+            <div class="flex-grow flex items-end justify-around space-x-2 pt-4 border-b border-gray-700 pb-2">
+                <div class="w-1/4 bg-gray-800 rounded-t hover:bg-gray-700 transition-all relative group" style="height: 20%;">
+                    <div class="absolute -top-6 left-0 w-full text-center text-[10px] hidden group-hover:block">SAD</div>
+                </div>
+                <div class="w-1/4 bg-gray-700 rounded-t hover:bg-gray-600 transition-all relative group" style="height: 15%;">
+                    <div class="absolute -top-6 left-0 w-full text-center text-[10px] hidden group-hover:block">GHOSTED</div>
+                </div>
+                <div class="w-1/4 bg-neon-green rounded-t shadow-[0_0_15px_#00ff41] relative group" style="height: 95%;">
+                    <div class="absolute -top-6 left-0 w-full text-center text-[10px] font-bold text-neon-green">BOAT</div>
+                </div>
+                <div class="w-1/4 bg-gray-600 rounded-t hover:bg-gray-500 transition-all relative group" style="height: 40%;">
+                    <div class="absolute -top-6 left-0 w-full text-center text-[10px] hidden group-hover:block">TODAY</div>
+                </div>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-2 text-xs font-mono">
+                <div class="flex justify-between border-b border-gray-800 py-1">
+                    <span>ROI:</span> <span class="text-neon-green">+400%</span>
+                </div>
+                <div class="flex justify-between border-b border-gray-800 py-1">
+                    <span>STATUS:</span> <span class="text-white">UNTOUCHABLE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-4 hud-panel rounded-lg p-6 relative flex flex-col items-center justify-center text-center overflow-hidden" id="beg-container">
+            <h2 class="text-xl font-bold text-neon-red mb-2">DOOMSDAY PROTOCOL</h2>
+            <p class="text-xs text-gray-400 mb-8 max-w-[200px]">ATTEMPTING TO CONTACT NATALIA WILL RESULT IN LOSS OF DIGNITY.</p>
+            
+            <button id="beg-btn" class="bg-red-600 text-white font-bold py-3 px-6 rounded shadow-[0_0_20px_#ff0000] z-20 absolute transition-all duration-75 text-sm uppercase tracking-widest">
+                BEG FOR HER BACK
             </button>
-            <div class="h-32"></div> </div>
-        
-        <div class="text-center pt-8 pb-12">
-            <button onclick="boatPartyReminder()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full font-bold shadow-lg btn-hover w-full md:w-auto">
-                I'm feeling anxious...
-            </button>
+        </div>
+
+        <div class="md:col-span-6 hud-panel rounded-lg p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
+                <h3 class="font-bold text-neon-blue">GEMINI DEEPFAKE DETECTOR</h3>
+            </div>
+            <div id="drop-zone" class="border-2 border-dashed border-gray-700 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-neon-blue hover:bg-blue-900/10 transition-all group" onclick="runScan()">
+                <p class="text-gray-500 text-sm group-hover:text-blue-300">DROP PREGNANCY TEST .JPG HERE</p>
+                <p class="text-[10px] text-gray-600 mt-2">ALGORITHM: SEARCHING FOR ARTIFACTS</p>
+            </div>
+            <div id="scan-result" class="hidden mt-4 bg-red-900/20 border border-red-500 text-red-400 p-2 text-center text-xs font-mono">
+                ⚠ ANALYSIS COMPLETE: 99.8% ARTIFICIAL GENERATION DETECTED.
+            </div>
+        </div>
+
+        <div class="md:col-span-6 hud-panel rounded-lg p-6 border-l-4 border-l-neon-green">
+            <h3 class="font-bold text-white mb-4 flex items-center">
+                <span class="text-neon-green mr-2">[SECURE]</span> MISSION BRIEFING
+            </h3>
+            <div class="space-y-3 font-mono text-sm">
+                <div class="flex items-start opacity-50">
+                    <span class="text-red-500 mr-2">>></span>
+                    <span class="line-through">Talk about Hinge Snitch</span>
+                    <span class="ml-2 text-xs text-red-500 font-bold">[REDACTED: TOO CRINGE]</span>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-neon-green mr-2">>></span>
+                    <span>Maintain "Consultant" Persona (Vague, Expensive).</span>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-neon-green mr-2">>></span>
+                    <span>If asked about ex: "Strategic Misalignment."</span>
+                </div>
+                <div class="flex items-start">
+                    <span class="text-neon-green mr-2">>></span>
+                    <span>Boat Party Intel: CLASSIFIED. (Do not leak).</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-12 mt-4 text-center">
+            <a href="https://www.youtube.com/watch?v=7D7vAkY9g2s&list=PL187D397C51307040" target="_blank" class="inline-block w-full md:w-auto">
+                <button class="bg-gray-900 hover:bg-neon-red hover:text-black border border-gray-700 text-gray-400 font-mono py-4 px-12 rounded transition-all duration-300 group">
+                    <span class="group-hover:hidden">EMERGENCY EJECT PROTOCOL</span>
+                    <span class="hidden group-hover:block font-bold">INITIATE TOXICITY RESTORATION (FUTURE)</span>
+                </button>
+            </a>
+            <p class="text-[10px] text-gray-600 mt-2">PRESS ONLY IN CASE OF WEAKNESS</p>
         </div>
 
     </main>
 
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-90 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-slate-800 p-8 rounded-xl max-w-md text-center border border-slate-600 shadow-2xl">
-            <h2 id="modal-title" class="text-2xl font-bold mb-4"></h2>
-            <p id="modal-text" class="text-lg text-slate-300 mb-6"></p>
-            <button onclick="closeModal()" class="bg-slate-600 hover:bg-slate-500 text-white px-6 py-2 rounded-lg font-bold">Dismiss</button>
+    <div class="marquee-container">
+        <div class="marquee-content font-mono">
+            BREAKING: TARINEE CREATES GROUP CHAT WITH MOM /// UPDATE: NATALIA MISSED CALL COUNT HITS 17 /// MARKET WATCH: JAIDEN'S DIGNITY TRADING FLAT /// REMINDER: YOU DON'T DESERVE LOVE, YOU DESERVE KPIs /// HINGE GIRL ASKS PROBING QUESTIONS; JAIDEN SWEATING PROFUSELY /// STAND ON BUSINESS ///
         </div>
     </div>
 
     <script>
-        // The Anti-Begging Button Logic
-        const begBtn = document.getElementById('begBtn');
-        const container = begBtn.parentElement;
-
+        // 1. The Impossible Beg Button
+        const btn = document.getElementById('beg-btn');
+        const container = document.getElementById('beg-container');
+        const insults = ["HAVE SOME SHAME", "STAND UP", "SHE'S CRAZY BRO", "DON'T DO IT", "SIMP DETECTED", "DOWN BAD"];
+        
         container.addEventListener('mousemove', (e) => {
-            const x = e.clientX - container.getBoundingClientRect().left;
-            const y = e.clientY - container.getBoundingClientRect().top;
+            const rect = btn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
             
-            // If mouse gets close to button, move button
-            const btnRect = begBtn.getBoundingClientRect();
-            const btnX = btnRect.left + btnRect.width / 2 - container.getBoundingClientRect().left;
-            const btnY = btnRect.top + btnRect.height / 2 - container.getBoundingClientRect().top;
+            // Mouse position relative to container
+            const mouseX = e.clientX - containerRect.left;
+            const mouseY = e.clientY - containerRect.top;
+            
+            // Button center
+            const btnX = (rect.left - containerRect.left) + rect.width / 2;
+            const btnY = (rect.top - containerRect.top) + rect.height / 2;
 
-            const dist = Math.sqrt(Math.pow(x - btnX, 2) + Math.pow(y - btnY, 2));
+            // Distance
+            const dist = Math.sqrt(Math.pow(mouseX - btnX, 2) + Math.pow(mouseY - btnY, 2));
+            
+            if (dist < 120) { // Trigger distance
+                // Vector from mouse to button (direction to flee)
+                let vecX = btnX - mouseX;
+                let vecY = btnY - mouseY;
+                
+                // Normalize
+                const len = Math.sqrt(vecX*vecX + vecY*vecY);
+                vecX /= len;
+                vecY /= len;
 
-            if (dist < 100) {
-                const newX = Math.random() * (container.offsetWidth - 100);
-                const newY = Math.random() * (container.offsetHeight - 50);
-                begBtn.style.left = newX + 'px';
-                begBtn.style.top = newY + 'px';
-                begBtn.style.transform = 'none';
-                begBtn.innerText = "NOPE.";
+                // Move randomly but generally away
+                let newX = btn.offsetLeft + (vecX * 150) + (Math.random() * 100 - 50);
+                let newY = btn.offsetTop + (vecY * 150) + (Math.random() * 100 - 50);
+
+                // Boundary checks
+                newX = Math.max(10, Math.min(newX, container.offsetWidth - 110));
+                newY = Math.max(10, Math.min(newY, container.offsetHeight - 50));
+
+                btn.style.left = `${newX}px`;
+                btn.style.top = `${newY}px`;
+                
+                // Change text randomly
+                btn.innerText = insults[Math.floor(Math.random() * insults.length)];
+                btn.style.backgroundColor = '#333';
             }
         });
 
-        // Event Handlers
-        function handleNatalia() {
-            showModal(
-                "🛑 ACCESS DENIED", 
-                "Bro. She called 16 times. She wants you to beg. You stayed calm. Do not fold now. Put the phone down and go do some pushups."
-            );
-        }
+        // 2. Fake Scanner Logic
+        function runScan() {
+            const dropZone = document.getElementById('drop-zone');
+            const result = document.getElementById('scan-result');
+            
+            dropZone.innerHTML = '<p class="text-neon-blue animate-pulse">SCANNING PIXELS...</p>';
+            
+            setTimeout(() => {
+                dropZone.innerHTML = '<p class="text-neon-blue animate-pulse">DETECTING LLM ARTIFACTS...</p>';
+            }, 1000);
 
-        function handleTarinee() {
-            showModal(
-                "🤖 GEMINI DETECTION SYSTEM", 
-                "Scanning PDF... \n\n Analysis: 99.9% FAKE. \n\n This pregnancy test was made by Large Language Model. Do not engage. Do not reply to the Hinge snitch."
-            );
-        }
-
-        function boatPartyReminder() {
-            showModal(
-                "🚤 BOAT PARTY MEMORY UNLOCKED", 
-                "Remember the Boat Party. You are a legend. You had a fivesome. You do not need to stress about a girl who fakes PDFs or a girl who screams at you. You are Jaiden Matharu. Go enjoy your date."
-            );
-        }
-
-        // Modal Logic
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalText = document.getElementById('modal-text');
-
-        function showModal(title, text) {
-            modalTitle.innerText = title;
-            modalText.innerText = text;
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            modal.classList.add('hidden');
+            setTimeout(() => {
+                dropZone.innerHTML = '<p class="text-red-500 font-bold">FRAUD DETECTED</p>';
+                result.classList.remove('hidden');
+                // Play fake error sound (optional visual cue)
+                dropZone.classList.add('border-red-500');
+            }, 2500);
         }
     </script>
 </body>
