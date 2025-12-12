@@ -1,378 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3 | MATHARU OPS CENTER</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <style>
-        :root {
-            --neon-red: #ff3333;
-            --neon-green: #00ff41;
-            --neon-blue: #00f3ff;
-            --bg-color: #050505;
-            --panel-bg: rgba(20, 20, 20, 0.75);
-        }
-        
-        body { 
-            font-family: 'JetBrains Mono', monospace; 
-            background-color: var(--bg-color); 
-            color: #e0e0e0;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
-                linear-gradient(rgba(0, 255, 65, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 30px 30px, 30px 30px;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>McLaren F1 // Glass 97 OS</title>
+<style>
+    /* --- CORE VARIABLES & RESET --- */
+    :root {
+        --mclaren-papaya: #FF8000;
+        --mclaren-blue: #47C7FC;
+        --mclaren-black: #101010;
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        --retro-gray: #c0c0c0;
+        --retro-light: #ffffff;
+        --retro-dark: #808080;
+        --crt-scanline: rgba(0, 0, 0, 0.1);
+        --font-ui: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        --font-mono: 'Courier New', Courier, monospace;
+    }
 
-        /* Glitch & Animations */
-        .glitch { position: relative; }
-        .glitch::before, .glitch::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        }
-        .glitch::before { left: 2px; text-shadow: -1px 0 var(--neon-red); clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
-        .glitch::after { left: -2px; text-shadow: -1px 0 var(--neon-blue); clip: rect(85px, 550px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse; }
-        
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 30px, 0); }
-            20% { clip: rect(80px, 9999px, 100px, 0); }
-            100% { clip: rect(10px, 9999px, 100px, 0); }
-        }
+    * { box-sizing: border-box; user-select: none; }
+    
+    body {
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 50%, #222, #000);
+        font-family: var(--font-ui);
+        color: white;
+    }
 
-        /* Glassmorphism Panels */
-        .hud-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        .hud-panel:hover { border-color: rgba(255, 255, 255, 0.2); }
-        .hud-panel::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Navigation Tabs */
-        .nav-btn {
-            background: transparent; border: 1px solid rgba(255,255,255,0.1);
-            color: #666; padding: 10px 20px; cursor: pointer; transition: all 0.2s;
-            font-family: 'JetBrains Mono'; text-transform: uppercase; font-size: 0.8rem;
-        }
-        .nav-btn:hover { color: #fff; border-color: #fff; }
-        .nav-btn.active {
-            background: rgba(0, 255, 65, 0.1);
-            color: var(--neon-green);
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
-        }
+    /* --- CRT & LIQUID EFFECTS --- */
+    .liquid-bg {
+        position: absolute;
+        top: -50%; left: -50%; width: 200%; height: 200%;
+        background: linear-gradient(45deg, transparent 40%, var(--mclaren-papaya) 50%, transparent 60%);
+        opacity: 0.1;
+        animation: liquidFlow 15s infinite linear;
+        pointer-events: none;
+        z-index: 0;
+    }
 
-        /* Inputs */
-        input, textarea, select {
-            background: rgba(0,0,0,0.5); border: 1px solid #333; color: var(--neon-green);
-            font-family: 'JetBrains Mono'; padding: 10px; width: 100%; outline: none;
-            transition: border-color 0.3s;
-        }
-        input:focus, textarea:focus, select:focus { border-color: var(--neon-blue); }
+    .crt-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 9999;
+    }
 
-        /* Utilities */
-        .text-neon-red { color: var(--neon-red); text-shadow: 0 0 5px var(--neon-red); }
-        .text-neon-green { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
-        .text-neon-blue { color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); }
-        .radar-sweep {
-            position: absolute; top: 50%; left: 50%; width: 90%; height: 90%;
-            border-radius: 50%; border: 1px solid rgba(0, 255, 65, 0.3);
-            transform: translate(-50%, -50%); overflow: hidden;
-        }
-        .radar-line {
-            position: absolute; top: 50%; left: 50%; width: 50%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-green));
-            transform-origin: 0 0; animation: radar-spin 4s infinite linear;
-        }
-        @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .blip {
-            position: absolute; width: 8px; height: 8px; border-radius: 50%;
-            box-shadow: 0 0 5px currentColor; animation: pulse 1s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.5); } 100% { opacity: 1; transform: scale(1); } }
-        
-        .hidden-tab { display: none; }
-    </style>
+    @keyframes liquidFlow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* --- DESKTOP UI --- */
+    #desktop {
+        position: relative;
+        width: 100%;
+        height: calc(100% - 40px);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        z-index: 1;
+    }
+
+    .desktop-icon {
+        width: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.2s;
+        text-shadow: 0 2px 4px black;
+    }
+
+    .desktop-icon:hover { transform: scale(1.1); }
+    
+    .icon-img {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--glass-border), transparent);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        margin-bottom: 5px;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+        box-shadow: 0 0 15px var(--mclaren-papaya);
+    }
+
+    /* --- WINDOW SYSTEM (The "Glass 97" Aesthetic) --- */
+    .window {
+        position: absolute;
+        background: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        min-width: 300px;
+        min-height: 200px;
+        resize: both;
+        overflow: hidden;
+        transition: opacity 0.2s, transform 0.2s;
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .title-bar {
+        height: 32px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        cursor: grab;
+        user-select: none;
+    }
+
+    .title-bar:active { cursor: grabbing; }
+
+    .title-text {
+        font-weight: bold;
+        font-size: 14px;
+        color: var(--mclaren-papaya);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .window-controls { display: flex; gap: 8px; }
+
+    .win-btn {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.3);
+        cursor: pointer;
+    }
+    .btn-close { background: #ff5f56; }
+    .btn-min { background: #ffbd2e; }
+    .btn-max { background: #27c93f; }
+
+    .window-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        color: #eee;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        /* Scrollbar styling */
+        scrollbar-width: thin;
+        scrollbar-color: var(--mclaren-papaya) rgba(0,0,0,0.3);
+    }
+
+    /* --- COMPONENT STYLES --- */
+    .specs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .spec-card {
+        background: rgba(0,0,0,0.4);
+        border: 1px solid var(--glass-border);
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .spec-label { color: var(--mclaren-blue); font-size: 10px; text-transform: uppercase; }
+    .spec-value { font-size: 18px; color: white; }
+
+    .team-list { display: flex; flex-direction: column; gap: 10px; }
+    .driver-row {
+        display: flex;
+        align-items: center;
+        background: rgba(255,255,255,0.05);
+        padding: 10px;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+    .driver-row:hover { background: rgba(255,128,0,0.2); }
+    .driver-num { font-size: 24px; font-weight: bold; color: var(--mclaren-papaya); margin-right: 15px; }
+
+    .history-timeline { border-left: 2px solid var(--mclaren-blue); padding-left: 20px; }
+    .history-item { margin-bottom: 20px; position: relative; }
+    .history-item::before {
+        content: ''; position: absolute; left: -26px; top: 5px;
+        width: 10px; height: 10px; background: var(--mclaren-papaya); border-radius: 50%;
+    }
+
+    /* --- TASKBAR --- */
+    #taskbar {
+        position: absolute;
+        bottom: 0; left: 0; width: 100%; height: 40px;
+        background: rgba(16, 16, 16, 0.8);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        z-index: 1000;
+    }
+    
+    .start-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(180deg, #333, #111);
+        border: 1px solid #555;
+        padding: 4px 12px;
+        color: white;
+        font-weight: bold;
+        font-style: italic;
+        box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2);
+        cursor: pointer;
+    }
+
+    .task-time { margin-left: auto; font-family: var(--font-mono); }
+
+    /* Utilities */
+    .hidden { display: none !important; }
+    .w-full { width: 100%; }
+    h2 { border-bottom: 1px solid var(--mclaren-papaya); padding-bottom: 5px; margin-top: 0; }
+</style>
 </head>
-<body class="pb-20">
+<body>
 
-    <header class="p-6 border-b border-gray-800 flex flex-col md:flex-row justify-between items-center bg-black/90 sticky top-0 z-50 backdrop-blur-md">
-        <div class="mb-4 md:mb-0">
-            <h1 class="text-3xl font-bold tracking-tighter text-white glitch" data-text="M3 PROTOCOL // v2.0">M3 PROTOCOL // v2.0</h1>
-            <p class="text-xs text-gray-500 font-mono mt-1">MATHARU MISCONDUCT MANAGER</p>
-        </div>
-        
-        <div class="flex space-x-2">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active">
-                <i class="fas fa-chart-pie mr-2"></i>Status Board
-            </button>
-            <button onclick="switchTab('ops')" id="btn-ops" class="nav-btn">
-                <i class="fas fa-terminal mr-2"></i>Tactical Ops
-            </button>
-        </div>
-    </header>
+    <div class="liquid-bg"></div>
+    <div class="crt-overlay"></div>
 
-    <main class="max-w-7xl mx-auto p-4 mt-4">
-
-        <div id="view-dashboard" class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            
-            <div class="md:col-span-4 hud-panel rounded-lg p-1 min-h-[300px] flex flex-col relative group">
-                <div class="p-3 border-b border-gray-800 flex justify-between">
-                    <span class="text-xs font-bold text-neon-red">THREAT RADAR</span>
-                    <span class="text-xs text-gray-400 animate-pulse">LIVE TRACKING</span>
-                </div>
-                <div class="flex-grow relative flex items-center justify-center bg-black/40 m-2 rounded border border-gray-800">
-                    <div class="radar-sweep">
-                        <div class="radar-line"></div>
-                        <div class="blip bg-red-600" style="top: 20%; left: 70%;"></div> <div class="blip bg-orange-500" style="top: 60%; left: 30%; width: 20px; height: 20px; filter: blur(4px);"></div> <div class="blip bg-yellow-400" style="top: 80%; left: 80%; width: 4px; height: 4px;"></div>
-                    </div>
-                    <div class="absolute inset-0 border border-gray-800 rounded-full w-3/4 h-3/4 m-auto"></div>
-                </div>
-                <div class="absolute bottom-4 left-4 right-4 bg-red-900/30 border border-red-600 p-2 rounded text-center">
-                    <p class="text-xs text-red-400 uppercase">Incoming: 16 Missed Calls</p>
-                    <p class="text-xs text-gray-400">STATUS: HOLD THE LINE</p>
-                </div>
-            </div>
-
-            <div class="md:col-span-4 hud-panel rounded-lg p-4 flex flex-col justify-between">
-                <div>
-                    <h2 class="text-sm font-bold text-neon-blue mb-1">PERFORMANCE ANALYTICS</h2>
-                    <p class="text-[10px] text-gray-500">REBOUND TRAJECTORY (YTD)</p>
-                </div>
-                <div class="flex items-end justify-around space-x-2 h-40 border-b border-gray-700 pb-2 mt-4">
-                    <div class="w-1/4 bg-gray-800 rounded-t h-[20%] relative group"><span class="absolute -top-4 w-full text-center text-[9px] hidden group-hover:block">SAD</span></div>
-                    <div class="w-1/4 bg-gray-700 rounded-t h-[10%] relative group"><span class="absolute -top-4 w-full text-center text-[9px] hidden group-hover:block">GHOSTED</span></div>
-                    <div class="w-1/4 bg-neon-green rounded-t h-[95%] shadow-[0_0_15px_#00ff41] relative group"><span class="absolute -top-5 left-0 w-full text-center text-[9px] font-bold text-neon-green">BOAT</span></div>
-                    <div class="w-1/4 bg-blue-600 rounded-t h-[45%] relative group"><span class="absolute -top-4 w-full text-center text-[9px] hidden group-hover:block">TODAY</span></div>
-                </div>
-                <div class="mt-2 text-center">
-                    <span class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded border border-yellow-500/30">CERTIFIED DEGENERATE</span>
-                </div>
-            </div>
-
-            <div class="md:col-span-4 hud-panel rounded-lg p-6 relative flex flex-col items-center justify-center text-center overflow-hidden" id="beg-container">
-                <h2 class="text-xl font-bold text-neon-red mb-2">DOOMSDAY PROTOCOL</h2>
-                <p class="text-xs text-gray-400 mb-8 max-w-[200px]">ATTEMPTING TO CONTACT NATALIA WILL RESULT IN IMMEDIATE SHAME.</p>
-                <button id="beg-btn" class="bg-red-600 text-white font-bold py-3 px-6 rounded shadow-[0_0_20px_#ff0000] z-20 absolute transition-all duration-75 text-sm uppercase tracking-widest">
-                    BEG FOR HER BACK
-                </button>
-            </div>
-
-            <div class="md:col-span-6 hud-panel rounded-lg p-6">
-                <div class="flex items-center gap-3 mb-4">
-                    <i class="fas fa-file-medical text-neon-blue"></i>
-                    <h3 class="font-bold text-neon-blue">GEMINI DEEPFAKE DETECTOR</h3>
-                </div>
-                <div id="drop-zone" class="border-2 border-dashed border-gray-700 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-neon-blue hover:bg-blue-900/10 transition-all group" onclick="runScan()">
-                    <p class="text-gray-500 text-sm group-hover:text-blue-300">DROP PREGNANCY TEST .JPG HERE</p>
-                    <p class="text-[10px] text-gray-600 mt-2">ALGORITHM: SEARCHING FOR ARTIFACTS</p>
-                </div>
-                <div id="scan-result" class="hidden mt-4 bg-red-900/20 border border-red-500 text-red-400 p-2 text-center text-xs font-mono">
-                    ⚠ ANALYSIS COMPLETE: 99.8% ARTIFICIAL GENERATION DETECTED.
-                </div>
-            </div>
-
-            <div class="md:col-span-6 hud-panel rounded-lg p-6 border-l-4 border-l-neon-green">
-                <h3 class="font-bold text-white mb-4 flex items-center">
-                    <span class="text-neon-green mr-2">[SECURE]</span> MISSION BRIEFING
-                </h3>
-                <div class="space-y-3 font-mono text-sm">
-                    <div class="flex items-start opacity-50">
-                        <span class="text-red-500 mr-2">>></span>
-                        <span class="line-through">Talk about Hinge Snitch</span>
-                        <span class="ml-2 text-xs text-red-500 font-bold">[REDACTED: CRINGE]</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="text-neon-green mr-2">>></span>
-                        <span>Maintain "Consultant" Persona.</span>
-                    </div>
-                    <div class="flex items-start">
-                        <span class="text-neon-green mr-2">>></span>
-                        <span>Boat Party Intel: CLASSIFIED.</span>
-                    </div>
-                </div>
-            </div>
+    <div id="desktop">
         </div>
 
-        <div id="view-ops" class="hidden-tab grid grid-cols-1 md:grid-cols-12 gap-6">
-            
-            <div class="md:col-span-8 hud-panel rounded-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-white"><i class="fas fa-comment-slash text-neon-red mr-2"></i>THE TEXT INTERCEPTOR</h3>
-                    <span class="text-[10px] text-gray-500 border border-gray-700 px-2 py-1 rounded">MANDATORY PRE-SCREENING</span>
-                </div>
-                <div class="space-y-4">
-                    <p class="text-xs text-gray-400">Type the text you WANT to send Natalia/Tarinee below. The AI will calculate the dignity cost.</p>
-                    <textarea id="text-input" rows="3" placeholder="Ex: 'I miss you' or 'Can we talk?'"></textarea>
-                    <button onclick="auditText()" class="bg-gray-800 hover:bg-neon-red hover:text-black text-white w-full py-2 rounded font-bold transition-all border border-gray-600">
-                        RUN RISK AUDIT
-                    </button>
-                    
-                    <div id="audit-result" class="hidden p-4 bg-black/50 border border-gray-700 rounded">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs text-gray-500">RISK SCORE:</span>
-                            <span class="text-xl font-bold text-neon-red">CRITICAL (99%)</span>
-                        </div>
-                        <p id="audit-msg" class="text-sm text-white font-mono"></p>
+    <div id="taskbar">
+        <button class="start-btn" onclick="toggleStartMenu()">
+            <span style="color:var(--mclaren-papaya)">///</span> START
+        </button>
+        <div id="active-tasks" style="display:flex; gap:10px; margin-left:15px;"></div>
+        <div class="task-time" id="clock">12:00 PM</div>
+    </div>
+
+<script>
+    // --- DATA STORE ---
+    const appData = {
+        'specs': {
+            title: 'MCL38 // TECHNICAL SPECS',
+            icon: '⚙️',
+            content: `
+                <h2>MCL38 Technical Data</h2>
+                <div class="specs-grid">
+                    <div class="spec-card">
+                        <div class="spec-label">Chassis</div>
+                        <div class="spec-value">Carbon Fibre Monocoque</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Power Unit</div>
+                        <div class="spec-value">Mercedes-AMG F1 M15</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Weight</div>
+                        <div class="spec-value">798 kg (min)</div>
+                    </div>
+                    <div class="spec-card">
+                        <div class="spec-label">Transmission</div>
+                        <div class="spec-value">McLaren 8-Speed</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="md:col-span-4 hud-panel rounded-lg p-6">
-                <h3 class="font-bold text-neon-green mb-4"><i class="fas fa-users mr-2"></i>ACTIVE LEADS</h3>
-                <div class="space-y-2">
-                    <div class="bg-gray-800/50 p-2 rounded border border-gray-700 flex justify-between items-center">
+                <br>
+                <h3>Aerodynamics</h3>
+                <p>Features an advanced ground-effect floor, redesigned sidepod inlets for maximum cooling efficiency, and an adaptive drag reduction system (DRS).</p>
+                <div style="margin-top:10px; height: 100px; background: rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; border:1px dashed #555;">
+                    [ 3D MODEL PLACEHOLDER: MCL38_AERO.GLB ]
+                </div>
+            `
+        },
+        'team': {
+            title: 'TEAM PERSONNEL',
+            icon: '🏎️',
+            content: `
+                <h2>Drivers</h2>
+                <div class="team-list">
+                    <div class="driver-row">
+                        <div class="driver-num">4</div>
                         <div>
-                            <p class="text-xs font-bold text-white">Tonight's Date</p>
-                            <p class="text-[10px] text-gray-500">Source: Hinge</p>
+                            <strong>Lando Norris</strong><br>
+                            <span style="font-size:12px; color:#aaa;">United Kingdom</span>
                         </div>
-                        <span class="text-[10px] bg-blue-900 text-blue-300 px-1 rounded">VETTING</span>
                     </div>
-                     <div class="bg-gray-800/50 p-2 rounded border border-gray-700 flex justify-between items-center">
+                    <div class="driver-row">
+                        <div class="driver-num">81</div>
                         <div>
-                            <p class="text-xs font-bold text-white">Boat Party Girl 1</p>
-                            <p class="text-[10px] text-gray-500">Source: The Ocean</p>
+                            <strong>Oscar Piastri</strong><br>
+                            <span style="font-size:12px; color:#aaa;">Australia</span>
                         </div>
-                        <span class="text-[10px] bg-green-900 text-green-300 px-1 rounded">LEGEND</span>
-                    </div>
-                    <div class="bg-gray-800/50 p-2 rounded border border-gray-700 flex justify-between items-center opacity-50">
-                        <div>
-                            <p class="text-xs font-bold text-white line-through">Tarinee</p>
-                            <p class="text-[10px] text-red-500">Source: Hell</p>
-                        </div>
-                        <span class="text-[10px] bg-red-900 text-red-300 px-1 rounded">BLOCKED</span>
                     </div>
                 </div>
-            </div>
-
-            <div class="md:col-span-12 hud-panel rounded-lg p-6 border-t-4 border-t-neon-blue">
-                <h3 class="font-bold text-white mb-4"><i class="fas fa-clipboard-check text-neon-blue mr-2"></i>DATE NIGHT LOG: POST-ENGAGEMENT REPORT</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="text-[10px] text-gray-400 uppercase">Cash Burn ($)</label>
-                        <input type="number" placeholder="0.00">
+                <br>
+                <h2>Management</h2>
+                <p><strong>Andrea Stella</strong> - Team Principal</p>
+                <p><strong>Zak Brown</strong> - CEO Racing</p>
+            `
+        },
+        'history': {
+            title: 'HISTORIC ARCHIVE',
+            icon: '📜',
+            content: `
+                <h2>Legacy & Heritage</h2>
+                <div class="history-timeline">
+                    <div class="history-item">
+                        <strong>1963</strong> - Founded by Bruce McLaren.
                     </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 uppercase">Vibe Score (1-10)</label>
-                        <select>
-                            <option>Select...</option>
-                            <option>1 - Awkward Silence</option>
-                            <option>5 - Mid</option>
-                            <option>8 - Solid</option>
-                            <option>10 - Wife Material</option>
-                        </select>
+                    <div class="history-item">
+                        <strong>1988 - MP4/4</strong>
+                        <p style="font-size:12px; margin:5px 0;">Dominance defined. Senna & Prost. 15 of 16 wins.</p>
+                        <div class="spec-card" style="font-size:12px;">Engine: Honda RA168E V6 Turbo</div>
                     </div>
-                    <div>
-                        <label class="text-[10px] text-gray-400 uppercase">Red Flags</label>
-                        <select>
-                            <option>None</option>
-                            <option>Mentioned her Ex</option>
-                            <option>Chews loudly</option>
-                            <option>Actually crazy</option>
-                        </select>
+                    <div class="history-item">
+                        <strong>1995 - F1 GTR</strong>
+                        <p style="font-size:12px;">Le Mans Victory on debut.</p>
+                    </div>
+                    <div class="history-item">
+                        <strong>2008 - MP4-23</strong>
+                        <p style="font-size:12px;">Lewis Hamilton wins first Driver's Championship.</p>
                     </div>
                 </div>
-                <button onclick="alert('DATA LOGGED. CONSULTING FEES ADDED TO TAB.')" class="mt-4 bg-neon-blue/20 text-neon-blue border border-neon-blue/50 w-full py-2 rounded font-bold text-sm hover:bg-neon-blue hover:text-black transition-all">
-                    SUBMIT TO DATABASE
-                </button>
-            </div>
-        </div>
+            `
+        },
+        'telemetry': {
+            title: 'LIVE TELEMETRY',
+            icon: '📈',
+            content: `
+                <h2>Simulation Mode</h2>
+                <canvas id="telemetryCanvas" width="300" height="150" style="background:#000; border:1px solid #333;"></canvas>
+                <p style="font-size:10px; color:var(--mclaren-papaya);">*LIVE STREAM SIMULATION ACTIVE</p>
+            `
+        }
+    };
 
-        <div class="mt-8 text-center">
-            <a href="https://www.youtube.com/watch?v=X2DTROC4JCI" target="_blank">
-                <button class="bg-gray-900 hover:bg-neon-red hover:text-black border border-gray-700 text-gray-400 font-mono py-4 px-12 rounded transition-all duration-300 group">
-                    <span class="group-hover:hidden">EMERGENCY EJECT PROTOCOL</span>
-                    <span class="hidden group-hover:block font-bold">INITIATE TOXICITY RESTORATION (FUTURE)</span>
-                </button>
-            </a>
-        </div>
+    // --- OS CORE LOGIC ---
+    let zIndexCounter = 10;
+    const desktop = document.getElementById('desktop');
+    const taskbarTasks = document.getElementById('active-tasks');
 
-    </main>
+    // 1. Initialize Desktop Icons
+    Object.keys(appData).forEach(key => {
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'desktop-icon';
+        iconDiv.innerHTML = `
+            <div class="icon-img">${appData[key].icon}</div>
+            <span style="font-size:12px;">${key.toUpperCase()}</span>
+        `;
+        iconDiv.onclick = () => openWindow(key);
+        desktop.appendChild(iconDiv);
+    });
 
-    <script>
-        // 1. Tab Switching
-        function switchTab(tabName) {
-            document.getElementById('view-dashboard').classList.add('hidden-tab');
-            document.getElementById('view-ops').classList.add('hidden-tab');
-            document.getElementById('btn-dashboard').classList.remove('active');
-            document.getElementById('btn-ops').classList.remove('active');
-
-            document.getElementById('view-' + tabName).classList.remove('hidden-tab');
-            document.getElementById('btn-' + tabName).classList.add('active');
+    // 2. Window Factory
+    function openWindow(appKey) {
+        // Check if window exists
+        if(document.getElementById(`win-${appKey}`)) {
+            const win = document.getElementById(`win-${appKey}`);
+            bringToFront(win);
+            return;
         }
 
-        // 2. The Impossible Beg Button (Physics)
-        const btn = document.getElementById('beg-btn');
-        const container = document.getElementById('beg-container');
-        const insults = ["HAVE SOME SHAME", "STAND UP", "SHE'S CRAZY BRO", "DON'T DO IT", "SIMP DETECTED", "DOWN BAD"];
+        const data = appData[appKey];
+        const win = document.createElement('div');
+        win.id = `win-${appKey}`;
+        win.className = 'window';
+        win.style.left = (50 + (zIndexCounter * 5)) + 'px'; // Cascade effect
+        win.style.top = (50 + (zIndexCounter * 5)) + 'px';
+        win.style.zIndex = ++zIndexCounter;
         
-        container.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            const mouseX = e.clientX - containerRect.left;
-            const mouseY = e.clientY - containerRect.top;
-            const btnX = (rect.left - containerRect.left) + rect.width / 2;
-            const btnY = (rect.top - containerRect.top) + rect.height / 2;
-            const dist = Math.sqrt(Math.pow(mouseX - btnX, 2) + Math.pow(mouseY - btnY, 2));
-            
-            if (dist < 120) {
-                let vecX = btnX - mouseX;
-                let vecY = btnY - mouseY;
-                const len = Math.sqrt(vecX*vecX + vecY*vecY);
-                vecX /= len; vecY /= len;
-                let newX = btn.offsetLeft + (vecX * 150) + (Math.random() * 100 - 50);
-                let newY = btn.offsetTop + (vecY * 150) + (Math.random() * 100 - 50);
-                newX = Math.max(10, Math.min(newX, container.offsetWidth - 110));
-                newY = Math.max(10, Math.min(newY, container.offsetHeight - 50));
-                btn.style.left = `${newX}px`;
-                btn.style.top = `${newY}px`;
-                btn.innerText = insults[Math.floor(Math.random() * insults.length)];
-            }
-        });
+        // Initial dimensions
+        win.style.width = '400px';
+        win.style.height = '500px';
 
-        // 3. Gemini Fake Scanner
-        function runScan() {
-            const dropZone = document.getElementById('drop-zone');
-            const result = document.getElementById('scan-result');
-            dropZone.innerHTML = '<p class="text-neon-blue animate-pulse">SCANNING PIXELS...</p>';
-            setTimeout(() => { dropZone.innerHTML = '<p class="text-neon-blue animate-pulse">DETECTING LLM ARTIFACTS...</p>'; }, 1000);
-            setTimeout(() => {
-                dropZone.innerHTML = '<p class="text-red-500 font-bold">FRAUD DETECTED</p>';
-                result.classList.remove('hidden');
-                dropZone.classList.add('border-red-500');
-            }, 2500);
-        }
+        win.innerHTML = `
+            <div class="title-bar" onmousedown="startDrag(event, '${win.id}')">
+                <div class="title-text">${data.title}</div>
+                <div class="window-controls">
+                    <div class="win-btn btn-min" onclick="minimizeWindow('${win.id}')"></div>
+                    <div class="win-btn btn-max"></div>
+                    <div class="win-btn btn-close" onclick="closeWindow('${win.id}')"></div>
+                </div>
+            </div>
+            <div class="window-content">
+                ${data.content}
+            </div>
+        `;
 
-        // 4. Text Auditor (New)
-        function auditText() {
-            const input = document.getElementById('text-input').value.toLowerCase();
-            const resultBox = document.getElementById('audit-result');
-            const msgBox = document.getElementById('audit-msg');
-            
-            resultBox.classList.remove('hidden');
+        // Add to desktop
+        desktop.appendChild(win);
+        
+        // Add to taskbar
+        addTaskbarItem(appKey, win.id);
 
-            if (input.includes('love') || input.includes('miss') || input.includes('please') || input.includes('sorry')) {
-                msgBox.innerText = "ANALYSIS: EXTREME WEAKNESS DETECTED. DO NOT SEND. GO TO THE GYM IMMEDIATELY.";
-                msgBox.className = "text-sm text-red-500 font-bold font-mono";
-            } else if (input.length === 0) {
-                msgBox.innerText = "ANALYSIS: SILENCE IS POWER. GOOD JOB.";
-                msgBox.className = "text-sm text-green-500 font-bold font-mono";
+        // Bring to front on click
+        win.onmousedown = () => bringToFront(win);
+
+        // Init Canvas if telemetry
+        if(appKey === 'telemetry') initTelemetry();
+    }
+
+    function closeWindow(id) {
+        const win = document.getElementById(id);
+        if(win) win.remove();
+        // Remove taskbar item
+        const appKey = id.replace('win-', '');
+        const taskItem = document.getElementById(`task-${appKey}`);
+        if(taskItem) taskItem.remove();
+    }
+
+    function minimizeWindow(id) {
+        const win = document.getElementById(id);
+        win.classList.add('hidden');
+    }
+
+    function bringToFront(win) {
+        win.style.zIndex = ++zIndexCounter;
+        win.classList.remove('hidden');
+    }
+
+    // 3. Taskbar Logic
+    function addTaskbarItem(appKey, winId) {
+        const item = document.createElement('div');
+        item.id = `task-${appKey}`;
+        item.style.padding = '4px 8px';
+        item.style.background = 'rgba(255,255,255,0.1)';
+        item.style.border = '1px solid rgba(255,255,255,0.2)';
+        item.style.fontSize = '12px';
+        item.style.cursor = 'pointer';
+        item.innerText = appData[appKey].title;
+        item.onclick = () => {
+            const win = document.getElementById(winId);
+            if(win.classList.contains('hidden')) {
+                bringToFront(win);
             } else {
-                msgBox.innerText = "ANALYSIS: CRINGE. DELETE THIS AND GHOST HER.";
-                msgBox.className = "text-sm text-orange-400 font-bold font-mono";
+                minimizeWindow(winId);
             }
+        };
+        taskbarTasks.appendChild(item);
+    }
+
+    // 4. Drag Logic
+    let isDragging = false;
+    let currentWin = null;
+    let offset = { x: 0, y: 0 };
+
+    function startDrag(e, winId) {
+        isDragging = true;
+        currentWin = document.getElementById(winId);
+        bringToFront(currentWin);
+        offset.x = e.clientX - currentWin.offsetLeft;
+        offset.y = e.clientY - currentWin.offsetTop;
+    }
+
+    document.onmousemove = function(e) {
+        if (!isDragging) return;
+        currentWin.style.left = (e.clientX - offset.x) + 'px';
+        currentWin.style.top = (e.clientY - offset.y) + 'px';
+    };
+
+    document.onmouseup = function() {
+        isDragging = false;
+        currentWin = null;
+    };
+
+    // 5. Clock
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }, 1000);
+
+    // 6. Telemetry Animation (Canvas)
+    function initTelemetry() {
+        const canvas = document.getElementById('telemetryCanvas');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let dataPoints = [];
+        
+        function draw() {
+            if(!document.getElementById('telemetryCanvas')) return; // Stop if window closed
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            dataPoints.push(Math.random() * 50 + 50);
+            if(dataPoints.length > canvas.width) dataPoints.shift();
+            
+            ctx.beginPath();
+            ctx.strokeStyle = '#FF8000';
+            ctx.lineWidth = 2;
+            for(let i = 0; i < dataPoints.length; i++) {
+                ctx.lineTo(i, canvas.height - dataPoints[i]);
+            }
+            ctx.stroke();
+            requestAnimationFrame(draw);
         }
-    </script>
+        draw();
+    }
+</script>
 </body>
 </html>
